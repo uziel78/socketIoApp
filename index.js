@@ -20,6 +20,24 @@ app.get('/room2', (req, res) => {
   res.render(__dirname + '/room.ejs', { room: 'room2' });
 });
 
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+
+app.post('/newroom', jsonParser, (req, res) => {
+  const room = req.body.room;
+  app.get('/' + room, (req, res) => {
+    res.render(__dirname + '/room.ejs', { room: room });
+  });
+  res.send({
+    room: room,
+  });
+});
+
+// room named anything example case, example room 44
+// app.get('/:room', (req, res) => {
+//   res.render(__dirname + '/room.ejs', { room: req.room });
+// });
+
 const admin = io.of('/admin');
 
 admin.on('connection', (socket) => {
@@ -38,24 +56,6 @@ admin.on('connection', (socket) => {
     admin.emit('chat message', 'user disconnected');
   });
 });
-
-// // route handler
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/index.html');
-// });
-
-// // Whenever someone connects this gets executed. setting up a connection to a socket
-// const admin = io.of('/admin');
-
-// admin.on('connection', (socket) => {
-//   socket.on('chat message', (msg) => {
-//     admin.emit('chat message', msg);
-//   });
-// });
-
-//console.log('ID: ' + socket.id);
-//console.log('a user connected');
-//});
 
 // listen on the connection event for incoming sockets, and log it to the console.
 server.listen(3000, () => {
