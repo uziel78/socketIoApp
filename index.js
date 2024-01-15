@@ -11,8 +11,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.render(__dirname + '/index.ejs', { rooms: rooms });
 });
+
+// rooms array
+let rooms = ['room1', 'room2'];
 
 app.get('/room1', (req, res) => {
   res.render(__dirname + '/room.ejs', { room: 'room1' });
@@ -34,6 +37,7 @@ app.post('/newroom', jsonParser, (req, res) => {
   app.get('/' + room, (req, res) => {
     res.render(__dirname + '/room.ejs', { room: room });
   });
+  rooms.push(room);
   res.send({
     room: room,
   });
