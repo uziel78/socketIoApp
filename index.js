@@ -4,20 +4,20 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
-// const path = require('path');
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+const path = require('path');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/room1', (req, res) => {
-  res.sendFile(__dirname + '/room1.html');
+  res.render(__dirname + '/room.ejs', { room: 'room1' });
 });
 
 app.get('/room2', (req, res) => {
-  res.sendFile(__dirname + '/room2.html');
+  res.render(__dirname + '/room.ejs', { room: 'room2' });
 });
 
 const admin = io.of('/admin');
