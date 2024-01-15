@@ -5,6 +5,8 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 const path = require('path');
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -20,11 +22,15 @@ app.get('/room2', (req, res) => {
   res.render(__dirname + '/room.ejs', { room: 'room2' });
 });
 
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
+//room named anything example case, example room 44
+// app.get('/:room', (req, res) => {
+//   res.render(__dirname + '/room.ejs', { room: req.room });
+// });
 
+//newroom POST handler:
 app.post('/newroom', jsonParser, (req, res) => {
   const room = req.body.room;
+  //const color = req.body.color;
   app.get('/' + room, (req, res) => {
     res.render(__dirname + '/room.ejs', { room: room });
   });
@@ -32,11 +38,6 @@ app.post('/newroom', jsonParser, (req, res) => {
     room: room,
   });
 });
-
-// room named anything example case, example room 44
-// app.get('/:room', (req, res) => {
-//   res.render(__dirname + '/room.ejs', { room: req.room });
-// });
 
 const admin = io.of('/admin');
 
